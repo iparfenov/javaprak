@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project basedir="." default="create-db" name="SOTest">
+    <target name="create-db">
+        <sql driver="org.postgresql.Driver"
+             classpath="postgresql-42.7.5.jar"
+             url="jdbc:postgresql://localhost/template1"
+             userid="postgres"
+             password="password"
+             src="create.sql"
+             autocommit="on">
+        </sql>
+    </target>
+
+    <target name="init-db">
+        <sql driver="org.postgresql.Driver"
+             classpath="postgresql-42.7.5.jar"
+             url="jdbc:postgresql://localhost/template1"
+             userid="postgres"
+             password="password"
+             src="init.sql">
+        </sql>
+    </target>
+
+</project>
