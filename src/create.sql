@@ -25,6 +25,8 @@ CREATE TABLE IF NOT EXISTS website.employees
     "position" text COLLATE pg_catalog."default" NOT NULL,
     email text COLLATE pg_catalog."default" NOT NULL,
     is_admin boolean NOT NULL DEFAULT false,
+    login text COLLATE pg_catalog."default" NOT NULL,
+    password text COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT employees_pkey PRIMARY KEY (employee_id)
 )
 TABLESPACE pg_default;
@@ -122,6 +124,19 @@ ALTER TABLE IF EXISTS website.employees_projects
     OWNER to postgres;
 
 
-
+CREATE TABLE IF NOT EXISTS website.employee_history
+(
+    employee_id integer NOT NULL,
+    positions text[] COLLATE pg_catalog."default" NOT NULL,
+    promoted_at date[] NOT NULL,
+    CONSTRAINT employee_history_pkey PRIMARY KEY (employee_id),
+    CONSTRAINT employee_history_employee_id_fkey FOREIGN KEY (employee_id)
+        REFERENCES website.employees (employee_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+TABLESPACE pg_default;
+ALTER TABLE IF EXISTS website.employee_history
+    OWNER to postgres;
 
 
