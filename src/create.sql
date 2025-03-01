@@ -36,47 +36,23 @@ ALTER TABLE IF EXISTS website.employees
 
 CREATE TABLE IF NOT EXISTS website.employees_payouts
 (
-    payout_id serial NOT NULL,
+    payout_id integer NOT NULL DEFAULT nextval('website.employees_payouts_payout_id_seq'::regclass),
     employee_id integer NOT NULL,
     amount numeric(20,2) NOT NULL,
     paid_at date NOT NULL,
+    bonus_id integer,
     CONSTRAINT employees_payouts_pkey PRIMARY KEY (payout_id),
-    CONSTRAINT payouts_employee_id_fk FOREIGN KEY (employee_id)
-    REFERENCES website.employees (employee_id) MATCH SIMPLE
-    ON UPDATE NO ACTION
-    ON DELETE NO ACTION
-)
-TABLESPACE pg_default;
-ALTER TABLE IF EXISTS website.employees_payouts
-    OWNER to postgres;
-
-CREATE TABLE IF NOT EXISTS website.bonuses
-(
-    bonus_id serial NOT NULL,
-    name text COLLATE pg_catalog."default" NOT NULL,
-    percentage numeric(10,2) NOT NULL,
-    CONSTRAINT bonuses_pkey PRIMARY KEY (bonus_id)
-)
-TABLESPACE pg_default;
-ALTER TABLE IF EXISTS website.bonuses
-    OWNER to postgres;
-
-
-CREATE TABLE IF NOT EXISTS website.employees_bonuses
-(
-    payout_id integer NOT NULL,
-    bonus_id integer NOT NULL,
-    amount numeric(20,2) NOT NULL,
-    CONSTRAINT employees_bonuses_pkey PRIMARY KEY (payout_id, bonus_id),
-    CONSTRAINT bonuses_bonus_id_fk FOREIGN KEY (bonus_id)
+    CONSTRAINT employees_payouts_bonus_id_fkey FOREIGN KEY (bonus_id)
     REFERENCES website.bonuses (bonus_id) MATCH SIMPLE
     ON UPDATE NO ACTION
-    ON DELETE NO ACTION,
-    CONSTRAINT bonuses_payout_id_fk FOREIGN KEY (payout_id)
-    REFERENCES website.employees_payouts (payout_id) MATCH SIMPLE
-    ON UPDATE NO ACTION
     ON DELETE NO ACTION
+    NOT VALID,
+    CONSTRAINT payouts_employee_id_fk FOREIGN KEY (employee_id)
+    REFERENCES website.employees (employee_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
 )
+
 TABLESPACE pg_default;
 ALTER TABLE IF EXISTS website.employees_bonuses
     OWNER to postgres;
