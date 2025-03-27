@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0/EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.prak.web.Bonuses" table="bonuses">
+        <id name="id" column="bonus_id">
+            <generator class="increment"/>
+        </id>
+        <property name="name" not-null="true"/>
+        <property name="percentage" not-null="true" length="20" precision="2"/>
+    </class>
+
+    <class name="com.prak.web.Employees" table="employees">
+        <id name="id" type="int" column="employee_id">
+            <generator class="increment"/>
+        </id>
+        <property name="name" type="java.lang.String" not-null="true"/>
+        <property name="address" type="java.lang.String" not-null="true"/>
+        <property name="birthday" type="java.util.Date" not-null="true"/>
+        <property name="education" type="java.lang.String"/>
+        <property name="working_since" type="java.util.Date" not-null="true" update="false"/>
+        <property name="position" type="java.lang.String" not-null="true"/>
+        <property name="email" type="java.lang.String" not-null="true"/>
+        <property name="is_admin" type="java.lang.Boolean" not-null="true"/>
+        <property name="login" type="java.lang.String" not-null="true" update="false"/>
+        <property name="password" type="java.lang.String" not-null="true"/>
+    </class>
+
+    <class name="com.prak.web.Projects" table="projects">
+        <id name = "id" type="int" column="project_id">
+            <generator class="increment"/>
+        </id>
+        <property name="name" type="java.lang.String" column="project_name" not-null="true"/>
+        <property name="start" type="java.util.Date" column="project_start" not-null="true" update="false"/>
+        <property name="end" type="java.util.Date" column="project_end"/>
+        <many-to-one name="head" column="project_head" class="com.prak.web.Employees" cascade="all" not-null="true"/>
+    </class>
+
+    <class name="com.prak.web.Employee_history" table="employee_history">
+        <id name="employee_id">
+            <generator class="foreign">
+                <param name="property">employee</param>
+            </generator>
+        </id>
+        <one-to-one name="employee" class="com.prak.web.Employees" cascade="all"/>
+        <property name="positions"/>
+        <property name="promoted_at"/>
+    </class>
+
+    <class name="com.prak.web.Employees_projects" table="employees_projects">
+        <composite-id>
+            <key-many-to-one name="project" column="project_id" class="com.prak.web.Projects"/>
+            <key-many-to-one name="employee" column="employee_id" class="com.prak.web.Employees"/>
+        </composite-id>
+        <property name="position" type="java.lang.String" not-null="true"/>
+        <property name="appointed_at" type="java.util.Date" not-null="true" update="false"/>
+        <property name="quit_at" type="java.util.Date"/>
+    </class>
+
+    <class name="com.prak.web.Payouts" table="employees_payouts">
+        <id name="id" type="int" column="payout_id">
+        <generator class="increment"/>
+        </id>
+        <many-to-one name="employee" class="com.prak.web.Employees" column="employee_id" update="false"/>
+        <many-to-one name="bonus" class="com.prak.web.Bonuses" column="bonus_id" update="false"/>
+        <property name="amount" not-null="true" update="false" length="20" precision="2"/>
+        <property name="paid_at" not-null="true" update="false"/>
+    </class>
+</hibernate-mapping>
