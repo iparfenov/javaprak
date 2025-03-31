@@ -1,25 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project basedir="." default="create-db" name="SOTest" xmlns:ivy="antlib:org.apache.ivy.ant">
+<project basedir="." default="create-db" name="web" xmlns:ivy="antlib:org.apache.ivy.ant">
 
     <path id="lib.path" location="lib"/>
-
-<!--    <ivy:configurations>-->
-<!--        <conf name="runtime" description=""/>-->
-<!--    </ivy:configurations>-->
 
     <target name="get-dependencies">
         <mkdir dir="lib"/>
         <ivy:cachepath pathid="lib.path">
             <dependency org="org.hibernate.orm" name="hibernate-core" rev="6.6.11.Final"/>
-            <!--            <dependency org="org.junit.jupiter" name="junit-jupiter" rev="5.11.4"/>-->
             <dependency org="org.junit.platform" name="junit-platform-launcher" rev="1.11.4"/>
             <dependency org="org.springframework.boot" name="spring-boot-starter-test" rev="3.4.4"/>
             <dependency org="org.springframework.boot" name="spring-boot-starter-jdbc" rev="3.4.4"/>
             <dependency org="org.springframework.boot" name="spring-boot-starter-web" rev="3.4.4"/>
             <dependency org="org.postgresql" name="postgresql" rev="42.7.5"/>
+            <dependency org="org.testng" name="testng" rev="7.9.0"/>
         </ivy:cachepath>
         <ivy:retrieve/>
     </target>
+
 
     <target name="create-db" depends="get-dependencies">
         <sql driver="org.postgresql.Driver"
@@ -27,7 +24,7 @@
              url="jdbc:postgresql://localhost/postgres"
              userid="postgres"
              password="password"
-             src="src/main/resources/create.sql"
+             src="src/sql/create.sql"
              autocommit="on">
         </sql>
     </target>
@@ -38,29 +35,63 @@
              url="jdbc:postgresql://localhost/postgres"
              userid="postgres"
              password="password"
-             src="src/main/resources/init.sql">
+             src="src/sql/init.sql">
         </sql>
     </target>
+
 
     <target name="init" depends="get-dependencies">
         <mkdir dir="build/classes"/>
     </target>
 
     <target name="compile" depends="init">
-        <javac srcdir="src" includeantruntime="false" destdir="build/classes" classpathref="lib.path"/>
+        <javac srcdir="src/main" includeantruntime="false" destdir="build/classes" classpathref="lib.path"/>
+        <copy todir="build/classes">
+            <fileset dir="src/main/resources" includes="*"/>
+        </copy>
     </target>
 
     <target name="jar" depends="compile">
         <mkdir dir="build/jar"/>
+        <manifestclasspath property="manifest.cp" jarfile="build/jar/web.jar">
+            <classpath>
+                <fileset dir="lib" includes="*.jar"/>
+            </classpath>
+        </manifestclasspath>
         <jar destfile="build/jar/web.jar" basedir="build/classes">
             <manifest>
-                <attribute name="Main-Class" value="com.prak.web.DBManager"/>
+<!--                <attribute name="Main-Class" value="com.prak.web.DBManager"/>-->
+                <attribute name="Class-Path" value="${manifest.cp}"/>
             </manifest>
         </jar>
     </target>
 
     <target name="run">
         <java jar="build/jar/web.jar" fork="true"/>
+    </target>
+
+
+    <target name="init-tests" depends="init-db">
+        <mkdir dir="build/tests"/>
+    </target>
+
+    <target name="compile-tests" depends="init-tests">
+        <javac srcdir="src" includeantruntime="false" destdir="build/tests" classpathref="lib.path"/>
+        <copy todir="build/tests">
+            <fileset dir="src/main/resources" includes="**"/>
+        </copy>
+    </target>
+
+    <path id="cp">
+        <fileset dir="lib" includes="*.jar"/>
+    </path>
+    <taskdef name="testng" classpathref="cp" classname="org.testng.TestNGAntTask"/>
+
+    <target name="test" depends="compile-tests">
+        <testng classpathref="cp">
+            <classpath location="build/tests"/>
+            <classfileset dir="build/tests/com/prak/web" includes="*_test.class"/>
+        </testng>
     </target>
 
 </project>

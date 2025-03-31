@@ -86,13 +86,13 @@ CREATE TABLE IF NOT EXISTS website.employees_payouts
     CONSTRAINT employees_payouts_pkey PRIMARY KEY (payout_id),
     CONSTRAINT employees_payouts_bonus_id_fkey FOREIGN KEY (bonus_id)
     REFERENCES website.bonuses (bonus_id) MATCH SIMPLE
-    ON UPDATE NO ACTION
+    ON UPDATE CASCADE
     ON DELETE NO ACTION
     NOT VALID,
     CONSTRAINT payouts_employee_id_fk FOREIGN KEY (employee_id)
     REFERENCES website.employees (employee_id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+        ON UPDATE CASCADE
+        ON DELETE SET NULL
 )
 TABLESPACE pg_default;
 ALTER TABLE IF EXISTS website.employees_payouts
@@ -120,8 +120,8 @@ CREATE TABLE IF NOT EXISTS website.projects
     CONSTRAINT projects_pkey PRIMARY KEY (project_id),
     CONSTRAINT head_fk FOREIGN KEY (project_head)
         REFERENCES website.employees (employee_id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+        ON UPDATE CASCADE
+        ON DELETE SET NULL
         NOT VALID
 )
 TABLESPACE pg_default;
@@ -141,13 +141,13 @@ CREATE TABLE IF NOT EXISTS website.employees_projects
     CONSTRAINT employees_projects_pkey PRIMARY KEY (employee_id, project_id),
     CONSTRAINT employee_id_fk FOREIGN KEY (employee_id)
         REFERENCES website.employees (employee_id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
         NOT VALID,
     CONSTRAINT project_id_fk FOREIGN KEY (project_id)
         REFERENCES website.projects (project_id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
         NOT VALID
 )
 TABLESPACE pg_default;
@@ -163,8 +163,8 @@ CREATE TABLE IF NOT EXISTS website.employee_history
     CONSTRAINT employee_history_pkey PRIMARY KEY (employee_id),
     CONSTRAINT employee_history_employee_id_fkey FOREIGN KEY (employee_id)
         REFERENCES website.employees (employee_id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 )
 TABLESPACE pg_default;
 ALTER TABLE IF EXISTS website.employee_history

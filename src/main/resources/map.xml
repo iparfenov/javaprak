@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE hibernate-mapping PUBLIC
         "-//Hibernate/Hibernate Mapping DTD 3.0/EN"
-        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+        "http://hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
     <class name="com.prak.web.Bonuses" table="bonuses">
         <id name="id" column="bonus_id">
@@ -34,7 +34,7 @@
         <property name="name" type="java.lang.String" column="project_name" not-null="true"/>
         <property name="start" type="java.util.Date" column="project_start" not-null="true" update="false"/>
         <property name="end" type="java.util.Date" column="project_end"/>
-        <many-to-one name="head" column="project_head" class="com.prak.web.Employees" cascade="all" not-null="true"/>
+        <many-to-one name="head" column="project_head" class="com.prak.web.Employees" not-null="true"/>
     </class>
 
     <class name="com.prak.web.Employee_history" table="employee_history">
@@ -43,9 +43,9 @@
                 <param name="property">employee</param>
             </generator>
         </id>
-        <one-to-one name="employee" class="com.prak.web.Employees" cascade="all"/>
-        <property name="positions"/>
-        <property name="promoted_at"/>
+        <one-to-one name="employee" class="com.prak.web.Employees" constrained="true"/>
+        <property name="positions" not-null="true"/>
+        <property name="promoted_at" not-null="true"/>
     </class>
 
     <class name="com.prak.web.Employees_projects" table="employees_projects">

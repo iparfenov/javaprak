@@ -16,7 +16,6 @@ public class Employees {
     private String login;
     private String password;
     private Set<Employees_projects> projects;
-    private Employee_history history;
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
@@ -54,6 +53,4 @@ public class Employees {
     public Set<Employees_projects> getProjects() { return projects; }
     public void setProjects(Set<Employees_projects> projects) { this.projects = projects; }
 
-    public Employee_history getHistory() { return history; }
-    public void setHistory(Employee_history history) { this.history = history; }
 }
