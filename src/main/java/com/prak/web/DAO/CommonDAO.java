@@ -29,38 +29,35 @@ public class CommonDAO<T> {
     }
 
     public void insert(T t) {
-        Transaction tx = null;
+        Transaction tx = s.beginTransaction();
         try {
-            tx = s.beginTransaction();
             s.persist(t);
             tx.commit();
         } catch (Exception e) {
-            if (tx != null) tx.rollback();
+            tx.rollback();
             throw e;
         }
     }
 
     public T update(T t) {
-        Transaction tx = null;
+        Transaction tx = s.beginTransaction();
         try {
-            tx = s.beginTransaction();
             T res = s.merge(t);
             tx.commit();
             return res;
         } catch (Exception e) {
-            if (tx != null) tx.rollback();
+            tx.rollback();
             throw e;
         }
     }
 
     public void delete(T t) {
-        Transaction tx = null;
+        Transaction tx = s.beginTransaction();
         try {
-            tx = s.beginTransaction();
             s.remove(t);
             tx.commit();
         } catch (Exception e) {
-            if (tx != null) tx.rollback();
+            tx.rollback();
             throw e;
         }
     }

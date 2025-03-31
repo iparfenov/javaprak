@@ -1,6 +1,8 @@
 HELP.md
 .gradle
 build/
+lib/
+test-output/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
@@ -35,3 +37,5 @@ out/
 
 ### VS Code ###
 .vscode/
+jacoco.exec
+coverage/

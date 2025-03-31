@@ -29,7 +29,6 @@ public class ProjectDAO_test {
         e3 = eDao.getById(3);
 
         p.setName("project");
-        p.setStart(new Date());
         p.setHead(e1);
     }
 
@@ -41,6 +40,16 @@ public class ProjectDAO_test {
         Assert.assertNotNull(p.getStart());
     }
 
+    @Test
+    public void testCreateWithDate() {
+        Projects p2 = new Projects();
+        p2.setName("project2");
+        p2.setHead(e1);
+        p2.setStart(new Date());
+        dao.create(p2, e1);
+        p2 = dao.getById(p2.getId());
+        Assert.assertNotNull(p2);
+    }
     @Test(dependsOnMethods = {"testCreate"})
     public void testUpdate() {
         p.setName("project__");
@@ -84,6 +93,28 @@ public class ProjectDAO_test {
     public void testMalformedEmployeeRequests() {
         try {
             dao.getEmployeePosition(p, e3);
+        } catch (MalformedRequestException e) {
+            Assert.assertTrue(true);
+            return;
+        }
+        Assert.fail();
+    }
+
+    @Test(dependsOnMethods = {"testGetEmployees"})
+    public void testMalformedEmployeeRequests2() {
+        try {
+            dao.getEmployeeAppointedAt(p, e3);
+        } catch (MalformedRequestException e) {
+            Assert.assertTrue(true);
+            return;
+        }
+        Assert.fail();
+    }
+
+    @Test(dependsOnMethods = {"testGetEmployees"})
+    public void testMalformedEmployeeRequests3() {
+        try {
+            dao.getEmployeeQuitAt(p, e3);
         } catch (MalformedRequestException e) {
             Assert.assertTrue(true);
             return;

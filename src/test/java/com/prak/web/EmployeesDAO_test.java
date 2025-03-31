@@ -24,6 +24,7 @@ public class EmployeesDAO_test {
 
     EmployeeDAO edao = new EmployeeDAO(s);
     Employees e1 = edao.getById(1);
+    Employees e2 = edao.getById(2);
     Employees e3 = edao.getById(3);
 
     Employees new_e = new Employees();
@@ -51,6 +52,12 @@ public class EmployeesDAO_test {
     }
 
     @Test(dependsOnMethods = {"testInsert"})
+    public void testSearch() {
+        List<Employees> le = edao.search(new_e.getName());
+        Assert.assertTrue(le.contains(new_e));
+    }
+
+    @Test(dependsOnMethods = {"testInsert"})
     public void testAdminUpdate() {
         new_e.setPassword("newpassword");
         new_e = edao.update(new_e, e1);
@@ -64,10 +71,28 @@ public class EmployeesDAO_test {
         Assert.assertEquals(new_e.getPassword(), "newuserpassword");
     }
 
+    @Test
+    public void testUnauthorizedUpdate() {
+        try {
+            edao.update(new_e, e3);
+        } catch (ActionNotAllowedException e) {
+            Assert.assertTrue(true);
+            return;
+        }
+        Assert.fail();
+    }
+
     @Test(dependsOnMethods = {"testInsert"})
     public void testPromote() {
-        edao.promote(new_e, "newposition", new Date(), e1);
+        edao.promote(new_e, "newposition", null, e1);
         Assert.assertEquals(edao.getHistory(new_e).getPositions().getLast(), "newposition");
+        Assert.assertNotNull(edao.getHistory(new_e).getPromoted_at().getLast());
+    }
+
+    @Test(dependsOnMethods = {"testInsert"})
+    public void testPromoteWithDate() {
+        edao.promote(new_e, "newposition2", new Date(), e1);
+        Assert.assertEquals(edao.getHistory(new_e).getPositions().getLast(), "newposition2");
         Assert.assertNotNull(edao.getHistory(new_e).getPromoted_at().getLast());
     }
 
@@ -85,6 +110,12 @@ public class EmployeesDAO_test {
     @Test(dependsOnMethods = {"testInsert", "testMalformedChangePositionInProject"})
     public void testAddToProject() {
         edao.addToProject(new_e, p, "position", null, e1);
+        Assert.assertNotNull(pdao.getEmployeeAppointedAt(p, new_e));
+    }
+
+    @Test(dependsOnMethods = {"testInsert", "testMalformedChangePositionInProject"})
+    public void testAddToProjectWithDate() {
+        edao.addToProject(e3, p, "position", new Date(), e1);
         Assert.assertNotNull(pdao.getEmployeeAppointedAt(p, new_e));
     }
 
@@ -112,10 +143,28 @@ public class EmployeesDAO_test {
         Assert.assertNotNull(pdao.getEmployeeQuitAt(p, new_e));
     }
 
+    @Test(dependsOnMethods = {"testChangePositionInProject"})
+    public void testRemoveFromProjectWithDate() {
+        Assert.assertNull(pdao.getEmployeeQuitAt(p, e2));
+        edao.removeFromProject(e2, p, new Date(), e1);
+        Assert.assertNotNull(pdao.getEmployeeQuitAt(p, e2));
+    }
+
     @Test(dependsOnMethods = {"testRemoveFromProject"})
     public void testMalformedRemoveFromProject() {
         try {
             edao.removeFromProject(new_e, p, null, e1);
+        } catch (MalformedRequestException e) {
+            Assert.assertTrue(true);
+            return;
+        }
+        Assert.fail();
+    }
+
+    @Test(dependsOnMethods = {"testRemoveFromProject"})
+    public void testMalformedRemoveFromProject2() {
+        try {
+            edao.removeFromProject(e2, p, null, e1);
         } catch (MalformedRequestException e) {
             Assert.assertTrue(true);
             return;
@@ -166,4 +215,14 @@ public class EmployeesDAO_test {
         Assert.assertEquals(lp.get(1).getId(), 6);
     }
 
+    @Test
+    public void testGetPayoutsUnauthorized() {
+        try{
+            edao.getPayouts(e1, e3);
+        } catch (ActionNotAllowedException e) {
+            Assert.assertTrue(true);
+            return;
+        }
+        Assert.fail();
+    }
 }

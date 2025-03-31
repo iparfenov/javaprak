@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project basedir="." default="create-db" name="web" xmlns:ivy="antlib:org.apache.ivy.ant">
+<project basedir="." default="create-db" name="web" xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:jacoco="antlib:org.jacoco.ant">
 
     <path id="lib.path" location="lib"/>
 
@@ -12,13 +12,18 @@
             <dependency org="org.springframework.boot" name="spring-boot-starter-jdbc" rev="3.4.4"/>
             <dependency org="org.springframework.boot" name="spring-boot-starter-web" rev="3.4.4"/>
             <dependency org="org.postgresql" name="postgresql" rev="42.7.5"/>
-            <dependency org="org.testng" name="testng" rev="7.9.0"/>
+            <dependency org="org.testng" name="testng" rev="7.7.0"/>
         </ivy:cachepath>
         <ivy:retrieve/>
     </target>
 
+    <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
+        <classpath path="lib/jacocoant.jar"/>
+    </taskdef>
+
 
     <target name="create-db" depends="get-dependencies">
+<!--    <target name="create-db">-->
         <sql driver="org.postgresql.Driver"
              classpath="lib/postgresql-42.7.5.jar"
              url="jdbc:postgresql://localhost/postgres"
@@ -73,10 +78,11 @@
 
     <target name="init-tests" depends="init-db">
         <mkdir dir="build/tests"/>
+        <mkdir dir="coverage"/>
     </target>
 
     <target name="compile-tests" depends="init-tests">
-        <javac srcdir="src" includeantruntime="false" destdir="build/tests" classpathref="lib.path"/>
+        <javac srcdir="src" includeantruntime="false" destdir="build/tests" debug="true" classpathref="lib.path"/>
         <copy todir="build/tests">
             <fileset dir="src/main/resources" includes="**"/>
         </copy>
@@ -88,10 +94,30 @@
     <taskdef name="testng" classpathref="cp" classname="org.testng.TestNGAntTask"/>
 
     <target name="test" depends="compile-tests">
-        <testng classpathref="cp">
-            <classpath location="build/tests"/>
-            <classfileset dir="build/tests/com/prak/web" includes="*_test.class"/>
-        </testng>
-    </target>
+<!--    <target name="test">-->
+        <jacoco:coverage>
+            <testng classpathref="cp" forkjvm="true">
+                <classpath location="build/tests"/>
+                <classfileset dir="build/tests/com/prak/web" includes="*_test.class"/>
+            </testng>
+        </jacoco:coverage>
 
+        <jacoco:report>
+            <executiondata>
+                <file file="jacoco.exec"/>
+            </executiondata>
+
+            <structure name="web">
+                <classfiles>
+                    <fileset dir="build/tests"/>
+                </classfiles>
+                <sourcefiles encoding="UTF-8">
+                    <fileset dir="src/main/java"/>
+                    <fileset dir="src/test/java"/>
+                </sourcefiles>
+            </structure>
+
+            <html destdir="coverage"/>
+        </jacoco:report>
+    </target>
 </project>
