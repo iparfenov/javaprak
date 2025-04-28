@@ -1,15 +1,24 @@
 package com.prak.web.DAO;
 
-import com.prak.web.Employees;
+import com.prak.web.entities.Employees;
 import com.prak.web.exceptions.ActionNotAllowedException;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
 
 import java.util.List;
 
 public class CommonDAO<T> {
+    protected SessionFactory sf;
     protected final Session s;
     protected final Class<T> c;
+
+    public CommonDAO(Class<T> c) {
+        this.sf = new Configuration().configure().buildSessionFactory();
+        this.s = sf.openSession();
+        this.c = c;
+    }
 
     public CommonDAO(Session s, Class<T> c) {
         this.c = c;

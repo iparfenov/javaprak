@@ -1,4 +1,4 @@
-package com.prak.web;
+package com.prak.web.entities;
 
 import java.util.Date;
 

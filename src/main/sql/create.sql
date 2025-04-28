@@ -1,7 +1,6 @@
--- DROP DATABASE IF EXISTS bd;
+-- DROP DATABASE IF EXISTS webdb;
 
--- CREATE DATABASE website
---     WITH
+-- CREATE DATABASE IF NOT EXISTS webdb WITH
 --     OWNER = postgres
 --     ENCODING = 'UTF8'
 --     LC_COLLATE = 'en'

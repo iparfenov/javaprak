@@ -1,8 +1,7 @@
-package com.prak.web;
+package com.prak.web.entities;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 public class Employee_history {
     private int employee_id;

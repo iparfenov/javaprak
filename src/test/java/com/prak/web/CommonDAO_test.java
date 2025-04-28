@@ -1,5 +1,6 @@
 package com.prak.web;
 
+import com.prak.web.entities.Employees;
 import com.prak.web.exceptions.ActionNotAllowedException;
 import org.testng.Assert;
 import org.testng.annotations.*;

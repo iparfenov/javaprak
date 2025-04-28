@@ -1,6 +1,5 @@
-package com.prak.web;
+package com.prak.web.entities;
 
-import java.sql.Timestamp;
 import java.util.Date;
 
 public class Payouts {

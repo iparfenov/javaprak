@@ -1,8 +1,7 @@
 package com.prak.web.DAO;
 
-import com.prak.web.Employees;
-import com.prak.web.Payouts;
-import com.prak.web.exceptions.ActionNotAllowedException;
+import com.prak.web.entities.Employees;
+import com.prak.web.entities.Payouts;
 import org.hibernate.Session;
 
 import java.util.Date;

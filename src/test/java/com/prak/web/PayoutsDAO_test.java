@@ -2,6 +2,8 @@ package com.prak.web;
 
 import com.prak.web.DAO.EmployeeDAO;
 import com.prak.web.DAO.PayoutsDAO;
+import com.prak.web.entities.Employees;
+import com.prak.web.entities.Payouts;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -29,7 +31,7 @@ public class PayoutsDAO_test {
         p.setAmount(10000);
         p.setEmployee(e1);
         dao.insert(p, e1);
-        Payouts check = edao.getPayouts(e1, e1).getLast();
+        Payouts check = edao.getPayouts(e1).getLast();
         Assert.assertEquals(check.getId(), p.getId());
         Assert.assertNotNull(check.getPaid_at());
     }
@@ -43,7 +45,7 @@ public class PayoutsDAO_test {
         p.setEmployee(e1);
         p.setPaid_at(new Date());
         dao.insert(p, e1);
-        Payouts check = edao.getPayouts(e1, e1).getLast();
+        Payouts check = edao.getPayouts(e1).getLast();
         Assert.assertEquals(check.getId(), p.getId());
         Assert.assertNotNull(check.getPaid_at());
     }

@@ -1,8 +1,9 @@
 package com.prak.web;
 
 import com.prak.web.DAO.BonusesDAO;
-import com.prak.web.DAO.CommonDAO;
 import com.prak.web.DAO.EmployeeDAO;
+import com.prak.web.entities.Bonuses;
+import com.prak.web.entities.Employees;
 import com.prak.web.exceptions.ActionNotAllowedException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

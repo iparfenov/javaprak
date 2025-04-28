@@ -1,6 +1,6 @@
 package com.prak.web.DAO;
 
-import com.prak.web.*;
+import com.prak.web.entities.*;
 import com.prak.web.exceptions.*;
 import org.hibernate.Session;
 
@@ -12,6 +12,11 @@ public class EmployeeDAO extends CommonDAO<Employees> {
 
     final CommonDAO<Employee_history> ehdao;
 
+    public EmployeeDAO() {
+        super(Employees.class);
+        ehdao = new CommonDAO<>(this.s, Employee_history.class);
+    }
+
     public EmployeeDAO(Session s) {
         super(s, Employees.class);
         ehdao = new CommonDAO<>(s, Employee_history.class);
@@ -21,8 +26,7 @@ public class EmployeeDAO extends CommonDAO<Employees> {
         return ehdao.getById(e.getId());
     }
 
-    public void promote(Employees e, String position, Date promoted_at, Employees requester) {
-        this.checkPermissions(requester);
+    public void promote(Employees e, String position, Date promoted_at) {
         if (promoted_at == null) {
             promoted_at = new Date();
         }
@@ -43,8 +47,7 @@ public class EmployeeDAO extends CommonDAO<Employees> {
         return res;
     }
 
-    public void addToProject(Employees e, Projects p, String position, Date appointed_at, Employees requester) {
-        this.checkPermissions(requester);
+    public void addToProject(Employees e, Projects p, String position, Date appointed_at) {
         CommonDAO<Employees_projects> epdao = new CommonDAO<>(s, Employees_projects.class);
         Employees_projects ep = s.createSelectionQuery(
                 "FROM Employees_projects WHERE employee.id = :eid AND project.id = :pid", Employees_projects.class)
@@ -64,8 +67,7 @@ public class EmployeeDAO extends CommonDAO<Employees> {
         epdao.update(ep);
     }
 
-    public void changePositionInProject(Employees e, Projects p, String position, Employees requester) {
-        this.checkPermissions(requester);
+    public void changePositionInProject(Employees e, Projects p, String position) {
         CommonDAO<Employees_projects> epdao = new CommonDAO<>(s, Employees_projects.class);
         Employees_projects ep = s.createSelectionQuery(
                 "FROM Employees_projects WHERE employee.id = :eid AND project.id = :pid", Employees_projects.class)
@@ -80,8 +82,7 @@ public class EmployeeDAO extends CommonDAO<Employees> {
         epdao.update(ep);
     }
 
-    public void removeFromProject(Employees e, Projects p, Date removed_at, Employees requester) {
-        this.checkPermissions(requester);
+    public void removeFromProject(Employees e, Projects p, Date removed_at) {
         CommonDAO<Employees_projects> epdao = new CommonDAO<>(s, Employees_projects.class);
         Employees_projects ep = s.createSelectionQuery(
                 "FROM Employees_projects WHERE employee.id = :eid AND project.id = :pid", Employees_projects.class)
@@ -101,13 +102,9 @@ public class EmployeeDAO extends CommonDAO<Employees> {
         }
     }
 
-    public List<Payouts> getPayouts(Employees e, Employees requester) {
-        if (requester.getIs_admin() || requester.getId() == e.getId()) {
-            return this.s.createSelectionQuery("from Payouts where employee.id = :id", Payouts.class)
-                    .setParameter("id", e.getId()).getResultList();
-        } else {
-            throw new ActionNotAllowedException();
-        }
+    public List<Payouts> getPayouts(Employees e) {
+        return this.s.createSelectionQuery("from Payouts where employee.id = :id", Payouts.class)
+                .setParameter("id", e.getId()).getResultList();
     }
 
     public List<Employees> search(String req) {
@@ -116,8 +113,7 @@ public class EmployeeDAO extends CommonDAO<Employees> {
                 .setParameter("reg", reg).getResultList();
     }
 
-    public void insert(Employees new_e, Employees requester) {
-        this.checkPermissions(requester);
+    public void insert(Employees new_e) {
         if (new_e.getWorking_since() == null) {
             new_e.setWorking_since(new Date());
         }
@@ -137,16 +133,7 @@ public class EmployeeDAO extends CommonDAO<Employees> {
         super.insert(new_e);
     }
 
-    public Employees update(Employees e, Employees requester) {
-        if (requester.getIs_admin() || requester.getId() == e.getId()) {
-            return super.update(e);
-        } else {
-            throw new ActionNotAllowedException();
-        }
-    }
-
-    public void delete(Employees e, Employees requester) {
-        this.checkPermissions(requester);
+    public void delete(Employees e) {
         ehdao.delete(ehdao.getById(e.getId()));
         CommonDAO<Employees_projects> edao = new CommonDAO<>(s, Employees_projects.class);
         List<Employees_projects> lep = s.createSelectionQuery
@@ -156,6 +143,11 @@ public class EmployeeDAO extends CommonDAO<Employees> {
             edao.delete(ep);
         }
         super.delete(e);
+    }
+
+    public Employees getByLogin(String login) {
+        return s.createSelectionQuery("FROM Employees WHERE login = :login", Employees.class)
+                .setParameter("login", login).getSingleResultOrNull();
     }
 
 }

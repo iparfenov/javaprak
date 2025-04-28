@@ -1,9 +1,8 @@
 package com.prak.web.DAO;
 
-import com.prak.web.Employees;
-import com.prak.web.Employees_projects;
-import com.prak.web.Projects;
-import com.prak.web.exceptions.ActionNotAllowedException;
+import com.prak.web.entities.Employees;
+import com.prak.web.entities.Employees_projects;
+import com.prak.web.entities.Projects;
 import com.prak.web.exceptions.MalformedRequestException;
 import org.hibernate.Session;
 
@@ -12,6 +11,10 @@ import java.util.Date;
 import java.util.List;
 
 public class ProjectDAO extends CommonDAO<Projects> {
+
+    public ProjectDAO() {
+        super(Projects.class);
+    }
 
     public ProjectDAO(Session s) {
         super(s, Projects.class);
@@ -61,21 +64,15 @@ public class ProjectDAO extends CommonDAO<Projects> {
         return ep.getQuit_at();
     }
 
-    public void create(Projects p, Employees requester) {
-        checkPermissions(requester);
+    public void create(Projects p) {
         if (p.getStart() == null) {
             p.setStart(new Date());
         }
         super.insert(p);
     }
 
-    public Projects update(Projects p, Employees requester) {
-        checkPermissions(requester);
-        return super.update(p);
-    }
 
-    public void close(Projects p, Employees requester) {
-        checkPermissions(requester);
+    public void close(Projects p) {
         if (p.getEnd() != null) {
             throw new MalformedRequestException("The project has already ended!");
         }

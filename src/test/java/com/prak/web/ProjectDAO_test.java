@@ -2,6 +2,8 @@ package com.prak.web;
 
 import com.prak.web.DAO.EmployeeDAO;
 import com.prak.web.DAO.ProjectDAO;
+import com.prak.web.entities.Employees;
+import com.prak.web.entities.Projects;
 import com.prak.web.exceptions.MalformedRequestException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -78,14 +80,14 @@ public class ProjectDAO_test {
     @Test(dependsOnMethods = {"testUpdate"})
     public void testGetEmployees() {
         EmployeeDAO edao = new EmployeeDAO(s);
-        edao.addToProject(p.getHead(), p, "position", null, e1);
+        edao.addToProject(p.getHead(), p, "position", null);
         List<Employees> le = dao.getEmployees(p);
         Assert.assertEquals(le.size(), 1);
         Assert.assertEquals(le.getFirst(), e1);
         Assert.assertEquals(dao.getEmployeePosition(p, e1), "position");
         Assert.assertNotNull(dao.getEmployeeAppointedAt(p, e1));
         Assert.assertNull(dao.getEmployeeQuitAt(p, e1));
-        edao.removeFromProject(e1, p, null, e1);
+        edao.removeFromProject(e1, p, null);
         Assert.assertNotNull(dao.getEmployeeQuitAt(p, e1));
     }
 

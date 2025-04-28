@@ -1,4 +1,4 @@
-package com.prak.web;
+package com.prak.web.entities;
 
 public class Bonuses {
     private int id;

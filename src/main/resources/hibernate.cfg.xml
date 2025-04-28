@@ -5,7 +5,7 @@ Configuration DTD 3.0//EN" "http://hibernate.org/dtd/hibernate-configuration-3.0
     <session-factory>
         <!-- Database connection settings -->
         <property name="connection.driver_class">org.postgresql.Driver</property>
-        <property name="connection.url">jdbc:postgresql://localhost/postgres</property>
+        <property name="connection.url">jdbc:postgresql://localhost/webdb</property>
         <property name="connection.username">postgres</property>
         <property name="connection.password">password</property>
         <!-- SQL dialect -->
