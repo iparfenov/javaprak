@@ -10,7 +10,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-import java.util.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 public class CommonDAO_test {
@@ -22,14 +22,14 @@ public class CommonDAO_test {
 
     public CommonDAO_test() {
         new_e.setAddress("addr");
-        new_e.setBirthday(new Date());
+        new_e.setBirthday(new Timestamp(System.currentTimeMillis()));
         new_e.setEmail("email");
         new_e.setName("name");
         new_e.setLogin("login");
         new_e.setPassword("password");
         new_e.setIs_admin(false);
         new_e.setPosition("position");
-        new_e.setWorking_since(new Date());
+        new_e.setWorking_since(new Timestamp(System.currentTimeMillis()));
     }
 
     @Test

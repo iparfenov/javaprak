@@ -1,15 +1,15 @@
 package com.prak.web.entities;
 
-import java.util.Date;
+import java.sql.Timestamp;
 import java.util.Set;
 
 public class Employees {
     private int id;
     private String name;
     private String address;
-    private Date birthday;
+    private Timestamp birthday;
     private String education;
-    private Date working_since;
+    private Timestamp working_since;
     private String position;
     private String email;
     private Boolean is_admin;
@@ -26,14 +26,14 @@ public class Employees {
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
 
-    public Date getBirthday() { return birthday; }
-    public void setBirthday(Date birthday) { this.birthday = birthday; }
+    public Timestamp getBirthday() { return birthday; }
+    public void setBirthday(Timestamp birthday) { this.birthday = birthday; }
 
     public String getEducation() { return education; }
     public void setEducation(String education) { this.education = education; }
 
-    public Date getWorking_since() { return working_since; }
-    public void setWorking_since(Date working_since) { this.working_since = working_since; }
+    public Timestamp getWorking_since() { return working_since; }
+    public void setWorking_since(Timestamp working_since) { this.working_since = working_since; }
 
     public String getPosition() { return position; }
     public void setPosition(String position) { this.position = position; }

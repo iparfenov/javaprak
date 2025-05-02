@@ -1,11 +1,12 @@
 package com.prak.web.entities;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 public class Payouts {
     private int id;
     private float amount;
-    private Date paid_at;
+    private Timestamp paid_at;
     private Bonuses bonus;
     private Employees employee;
 
@@ -15,8 +16,8 @@ public class Payouts {
     public float getAmount() { return amount; }
     public void setAmount(float amount) { this.amount = amount; }
 
-    public Date getPaid_at() { return paid_at; }
-    public void setPaid_at(Date paid_at) { this.paid_at = paid_at; }
+    public Timestamp getPaid_at() { return paid_at; }
+    public void setPaid_at(Timestamp paid_at) { this.paid_at = paid_at; }
 
     public Bonuses getBonus() { return bonus; }
     public void setBonus(Bonuses bonus) { this.bonus = bonus; }

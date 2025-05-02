@@ -14,8 +14,8 @@ import org.hibernate.cfg.Configuration;
 import org.testng.annotations.*;
 import org.testng.Assert;
 
+import java.sql.Timestamp;
 import java.util.List;
-import java.util.Date;
 
 public class EmployeesDAO_test {
 
@@ -35,7 +35,7 @@ public class EmployeesDAO_test {
     @BeforeClass
     public void setUp() {
         new_e.setAddress("addr");
-        new_e.setBirthday(new Date());
+        new_e.setBirthday(new Timestamp(System.currentTimeMillis()));
         new_e.setEmail("email");
         new_e.setName("name");
         new_e.setLogin("login");
@@ -94,7 +94,7 @@ public class EmployeesDAO_test {
 
     @Test(dependsOnMethods = {"testInsert"})
     public void testPromoteWithDate() {
-        edao.promote(new_e, "newposition2", new Date());
+        edao.promote(new_e, "newposition2", new Timestamp(System.currentTimeMillis()));
         Assert.assertEquals(edao.getHistory(new_e).getPositions().getLast(), "newposition2");
         Assert.assertNotNull(edao.getHistory(new_e).getPromoted_at().getLast());
     }
@@ -118,7 +118,7 @@ public class EmployeesDAO_test {
 
     @Test(dependsOnMethods = {"testInsert", "testMalformedChangePositionInProject"})
     public void testAddToProjectWithDate() {
-        edao.addToProject(e3, p, "position", new Date());
+        edao.addToProject(e3, p, "position", new Timestamp(System.currentTimeMillis()));
         Assert.assertNotNull(pdao.getEmployeeAppointedAt(p, new_e));
     }
 
@@ -149,7 +149,7 @@ public class EmployeesDAO_test {
     @Test(dependsOnMethods = {"testChangePositionInProject"})
     public void testRemoveFromProjectWithDate() {
         Assert.assertNull(pdao.getEmployeeQuitAt(p, e2));
-        edao.removeFromProject(e2, p, new Date());
+        edao.removeFromProject(e2, p, new Timestamp(System.currentTimeMillis()));
         Assert.assertNotNull(pdao.getEmployeeQuitAt(p, e2));
     }
 

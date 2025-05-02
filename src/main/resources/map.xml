@@ -34,7 +34,7 @@
         <property name="name" type="java.lang.String" column="project_name" not-null="true"/>
         <property name="start" type="java.util.Date" column="project_start" not-null="true" update="false"/>
         <property name="end" type="java.util.Date" column="project_end"/>
-        <many-to-one name="head" column="project_head" class="com.prak.web.entities.Employees" not-null="true"/>
+        <many-to-one name="head" column="project_head" class="com.prak.web.entities.Employees"/>
     </class>
 
     <class name="com.prak.web.entities.Employee_history" table="employee_history">

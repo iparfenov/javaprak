@@ -2,6 +2,7 @@ package com.prak.web.components;
 
 import com.prak.web.DAO.BonusesDAO;
 import com.prak.web.DAO.EmployeeDAO;
+import com.prak.web.DAO.PayoutsDAO;
 import com.prak.web.DAO.ProjectDAO;
 import com.prak.web.entities.Employees;
 import org.hibernate.Session;
@@ -13,6 +14,7 @@ public class DAOsBean {
     private final EmployeeDAO employeeDAO;
     private final ProjectDAO projectDAO;
     private final BonusesDAO bonusesDAO;
+    private final PayoutsDAO payoutsDAO;
     private Employees employee = null;
 
     public DAOsBean(SessionFactoryBean sessionfactory) {
@@ -20,6 +22,7 @@ public class DAOsBean {
         this.employeeDAO = new EmployeeDAO(session);
         this.projectDAO = new ProjectDAO(session);
         this.bonusesDAO = new BonusesDAO(session);
+        this.payoutsDAO = new PayoutsDAO(session);
     }
 
     public Employees getEmployee() {
@@ -41,5 +44,7 @@ public class DAOsBean {
     public BonusesDAO getBonusesDAO() {
         return bonusesDAO;
     }
+
+    public PayoutsDAO getPayoutsDAO() { return payoutsDAO; }
 
 }

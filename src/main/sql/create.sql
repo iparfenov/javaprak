@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS website.projects
     project_name text COLLATE pg_catalog."default" NOT NULL,
     project_start timestamp with time zone NOT NULL,
     project_end timestamp with time zone,
-    project_head integer NOT NULL,
+    project_head integer,
     CONSTRAINT projects_pkey PRIMARY KEY (project_id),
     CONSTRAINT head_fk FOREIGN KEY (project_head)
         REFERENCES website.employees (employee_id) MATCH SIMPLE

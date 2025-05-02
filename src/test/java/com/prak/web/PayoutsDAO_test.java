@@ -10,6 +10,7 @@ import org.hibernate.cfg.Configuration;
 import org.testng.annotations.*;
 import org.testng.Assert;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 public class PayoutsDAO_test {
@@ -43,7 +44,7 @@ public class PayoutsDAO_test {
         Payouts p = new Payouts();
         p.setAmount(10000);
         p.setEmployee(e1);
-        p.setPaid_at(new Date());
+        p.setPaid_at(new Timestamp(System.currentTimeMillis()));
         dao.insert(p, e1);
         Payouts check = edao.getPayouts(e1).getLast();
         Assert.assertEquals(check.getId(), p.getId());

@@ -13,6 +13,7 @@
         <title>Премии</title>
     </head>
     <body>
+        <jsp:include page="/templates/header.jsp"/>
         <table style="width: 100%">
             <tr>
                 <th>Название</th>
@@ -25,5 +26,19 @@
                 </tr>
             </c:forEach>
         </table>
+        <c:if test="${employee.getIs_admin()}">
+            <c:if test="${add == null}">
+                <a href="/bonuses/add">Добавить премию</a>
+            </c:if>
+            <c:if test="${add != null}">
+                <form method="POST" action="/bonuses/add">
+                    <p>Название:</p>
+                    <input name="name">
+                    <p>Процент зарплаты:</p>
+                    <input name="percentage">
+                    <button>Создать</button>
+                </form>
+            </c:if>
+        </c:if>
     </body>
 </html>

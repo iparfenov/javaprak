@@ -3,6 +3,8 @@ package com.prak.web.controllers;
 import com.prak.web.components.DAOsBean;
 import com.prak.web.components.SessionFactoryBean;
 import com.prak.web.entities.Employees;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,15 +33,22 @@ public class LoginController {
 
         Employees emp = daos.getEmployeeDAO().getByLogin(login);
         boolean success = emp != null && emp.getPassword().equals(password);
-        redirectAttributes.addFlashAttribute("login_success", success);
         if (success) {
             daos.setEmployee(emp);
             redirectView.setUrl("/home");
             return redirectView;
         } else {
             redirectView.setUrl("/login");
+            redirectAttributes.addFlashAttribute("login_success", false);
             return redirectView;
         }
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        session.invalidate();
+        return "redirect:/";
     }
 
 }

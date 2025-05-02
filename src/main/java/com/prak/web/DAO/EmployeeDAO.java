@@ -3,9 +3,10 @@ package com.prak.web.DAO;
 import com.prak.web.entities.*;
 import com.prak.web.exceptions.*;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class EmployeeDAO extends CommonDAO<Employees> {
@@ -26,9 +27,9 @@ public class EmployeeDAO extends CommonDAO<Employees> {
         return ehdao.getById(e.getId());
     }
 
-    public void promote(Employees e, String position, Date promoted_at) {
+    public void promote(Employees e, String position, Timestamp promoted_at) {
         if (promoted_at == null) {
-            promoted_at = new Date();
+            promoted_at = new Timestamp(System.currentTimeMillis());
         }
         Employee_history eh = ehdao.getById(e.getId());
         eh.getPositions().add(position);
@@ -47,21 +48,21 @@ public class EmployeeDAO extends CommonDAO<Employees> {
         return res;
     }
 
-    public void addToProject(Employees e, Projects p, String position, Date appointed_at) {
+    public void addToProject(Employees e, Projects p, String position, Timestamp appointed_at) {
         CommonDAO<Employees_projects> epdao = new CommonDAO<>(s, Employees_projects.class);
         Employees_projects ep = s.createSelectionQuery(
                 "FROM Employees_projects WHERE employee.id = :eid AND project.id = :pid", Employees_projects.class)
                 .setParameter("eid", e.getId()).setParameter("pid", p.getId())
                 .getSingleResultOrNull();
         if (ep != null) {
-            throw new MalformedRequestException("Employee is already in this project!");
+            throw new MalformedRequestException("Служащий уже участвует в этом проекте!");
         }
         ep = new Employees_projects();
         ep.setEmployee(e);
         ep.setProject(p);
         ep.setPosition(position);
         if (appointed_at == null) {
-            appointed_at = new Date();
+            appointed_at = new Timestamp(System.currentTimeMillis());
         }
         ep.setAppointed_at(appointed_at);
         epdao.update(ep);
@@ -73,33 +74,32 @@ public class EmployeeDAO extends CommonDAO<Employees> {
                 "FROM Employees_projects WHERE employee.id = :eid AND project.id = :pid", Employees_projects.class)
                 .setParameter("eid", e.getId()).setParameter("pid", p.getId()).getSingleResultOrNull();
         if (ep == null) {
-            throw new MalformedRequestException("Employee is not in this project");
+            throw new MalformedRequestException("Служащий не участвует в этом проекте");
         }
         if (ep.getQuit_at() != null) {
-            throw new MalformedRequestException("Employee has already left this project");
+            throw new MalformedRequestException("Служащий уже вышел из этого проекта");
         }
         ep.setPosition(position);
         epdao.update(ep);
     }
 
-    public void removeFromProject(Employees e, Projects p, Date removed_at) {
+    public void removeFromProject(Employees e, Projects p, Timestamp removed_at) {
         CommonDAO<Employees_projects> epdao = new CommonDAO<>(s, Employees_projects.class);
         Employees_projects ep = s.createSelectionQuery(
                 "FROM Employees_projects WHERE employee.id = :eid AND project.id = :pid", Employees_projects.class)
                 .setParameter("eid", e.getId()).setParameter("pid", p.getId()).getSingleResultOrNull();
         if (ep == null) {
-            throw new MalformedRequestException("Employee is not in this project");
+            throw new MalformedRequestException("Служащий не участвует в этом проекте");
         }
         if (ep.getQuit_at() != null) {
-            throw new MalformedRequestException("Employee has already left this project");
+            throw new MalformedRequestException("Служащий уже вышел из этого проекта");
         }
         if (removed_at == null) {
-            removed_at = new Date();
+            removed_at = new Timestamp(System.currentTimeMillis());
         }
         ep.setQuit_at(removed_at);
-        if (p.getHead() == e) {
-            p.setHead(null);
-        }
+
+        epdao.update(ep);
     }
 
     public List<Payouts> getPayouts(Employees e) {
@@ -115,17 +115,18 @@ public class EmployeeDAO extends CommonDAO<Employees> {
 
     public void insert(Employees new_e) {
         if (new_e.getWorking_since() == null) {
-            new_e.setWorking_since(new Date());
+            new_e.setWorking_since(new Timestamp(System.currentTimeMillis()));
         }
         Employee_history history = new Employee_history();
         history.setEmployee(new_e);
         List<String> positions = new ArrayList<>();
-        List<Date> dates = new ArrayList<>();
+        List<Timestamp> dates = new ArrayList<>();
+        Timestamp t = new Timestamp(new_e.getWorking_since().getTime());
 
         positions.add(new_e.getPosition());
         history.setPositions(positions);
 
-        dates.add(new_e.getWorking_since());
+        dates.add(t);
         history.setPromoted_at(dates);
 
         ehdao.insert(history);

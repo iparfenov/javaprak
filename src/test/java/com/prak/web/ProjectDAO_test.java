@@ -11,6 +11,7 @@ import org.hibernate.cfg.Configuration;
 import org.testng.annotations.*;
 import org.testng.Assert;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class ProjectDAO_test {
         Projects p2 = new Projects();
         p2.setName("project2");
         p2.setHead(e1);
-        p2.setStart(new Date());
+        p2.setStart(new Timestamp(System.currentTimeMillis()));
         dao.create(p2, e1);
         p2 = dao.getById(p2.getId());
         Assert.assertNotNull(p2);
