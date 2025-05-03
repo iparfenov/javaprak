@@ -44,8 +44,8 @@ public class BonusesController {
         if (daos.getEmployee() == null) return "redirect:/login";
         Bonuses new_bonus = new Bonuses();
         new_bonus.setName(name);
-        new_bonus.setPercentage(Float.parseFloat(percentage));
         try {
+            new_bonus.setPercentage(Float.parseFloat(percentage));
             daos.getBonusesDAO().insert(new_bonus);
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());

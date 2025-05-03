@@ -41,6 +41,7 @@ public class CommonDAO<T> {
         Transaction tx = s.beginTransaction();
         try {
             s.persist(t);
+            s.flush();
             tx.commit();
         } catch (Exception e) {
             tx.rollback();

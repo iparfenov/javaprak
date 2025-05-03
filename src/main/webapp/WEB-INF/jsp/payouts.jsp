@@ -25,7 +25,7 @@
                 <tr>
                     <td>${p.getPaid_at().toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"))}</td>
                     <td>
-                        <a href="/employees/${p.getId()}">${p.getEmployee().getName()}</a>
+                        <a href="/employees/${p.getEmployee().getId()}">${p.getEmployee().getName()}</a>
                     </td>
                     <td>${p.getAmount()}</td>
                     <td>

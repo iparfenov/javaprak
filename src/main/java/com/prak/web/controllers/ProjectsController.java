@@ -51,16 +51,16 @@ public class ProjectsController {
         Projects newProject = new Projects();
         Calendar startDate = Calendar.getInstance();
         startDate.set(startYear, startMonth, startDay);
-        newProject.setStart(new Timestamp(startDate.getTimeInMillis()));
 
         Calendar endDate = Calendar.getInstance();
         endDate.set(endYear, endMonth, endDay);
-        newProject.setEnd(new Timestamp(endDate.getTimeInMillis()));
 
         newProject.setName(name);
         newProject.setHead(daos.getEmployeeDAO().getById(head));
 
         try {
+            newProject.setStart(new Timestamp(startDate.getTimeInMillis()));
+            newProject.setEnd(new Timestamp(endDate.getTimeInMillis()));
             daos.getProjectDAO().create(newProject);
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());

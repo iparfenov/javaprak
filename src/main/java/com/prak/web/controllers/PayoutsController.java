@@ -31,13 +31,13 @@ public class PayoutsController {
         if (!daos.getEmployee().getIs_admin()) return "redirect:/home";
         Payouts new_payout = new Payouts();
         new_payout.setEmployee(daos.getEmployeeDAO().getById(eid));
-        new_payout.setAmount(Float.parseFloat(amount));
         if (bid >= 0) {
             new_payout.setBonus(daos.getBonusesDAO().getById(bid));
         } else {
             new_payout.setBonus(null);
         }
         try {
+            new_payout.setAmount(Float.parseFloat(amount));
             daos.getPayoutsDAO().insert(new_payout);
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());

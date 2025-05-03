@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.prak.web.entities.Employees" %>
+<%@ page import="java.util.Calendar" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <html>
     <style>
@@ -33,5 +34,64 @@
                 </c:forEach>
             </table>
         </c:if>
+
+        <c:if test="${employee.getIs_admin() && !adding_employee}">
+            <a href="/employees/add">Добавить нового сотрудника</a>
+        </c:if>
+
+        <c:if test="${employee.getIs_admin() && adding_employee}">
+            <%
+                Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int day = calendar.get(Calendar.DATE);
+            %>
+            <form method="POST" action="/employees/add">
+                <p>Имя: <input name="name"></p>
+                <p>Адрес: <input name="address"> </p>
+                <p>День рождения:
+                    <select name="birthday_year">
+                        <% for (int i = 1900; i <= year; i += 1) { %>
+                        <option value="<%=i%>"><%=i%></option>
+                        <% } %>
+                    </select>
+                    <select name="birthday_month">
+                        <% for (int i = 0; i < 12; i += 1) { %>
+                        <option value="<%=i%>"><%=i+1%></option>
+                        <% } %>
+                    </select>
+                    <select name="birthday_day">
+                        <% for (int i = 1; i <= 31; i += 1) { %>
+                        <option value="<%=i%>"><%=i%></option>
+                        <% } %>
+                    </select>
+                </p>
+                <p> Образование: <input name="education"> </p>
+                <p>Дата начала работы:
+                    <select name="working_since_year">
+                        <% for (int i = 1970; i <= year; i += 1) { %>
+                        <option value="<%=i%>" <% if (i == year) out.print("selected"); %>><%=i%></option>
+                        <% } %>
+                    </select>
+                    <select name="working_since_month">
+                        <% for (int i = 0; i < 12; i += 1) { %>
+                        <option value="<%=i%>" <% if (i == month) out.print("selected"); %>><%=i+1%></option>
+                        <% } %>
+                    </select>
+                    <select name="working_since_day">
+                        <% for (int i = 1; i <= 31; i += 1) { %>
+                        <option value="<%=i%>" <% if (i == day) out.print("selected"); %>><%=i%></option>
+                        <% } %>
+                    </select>
+                </p>
+                <p>Должность: <input name="position"></p>
+                <p>E-mail: <input name="email"> </p>
+                <p>Является администратором: <input type="checkbox" name="is_admin" value="true"> </p>
+                <p>Логин: <input name="login"> </p>
+                <p>Пароль: <input name="password"> </p>
+                <button>Добавить</button>
+            </form>
+        </c:if>
+
     </body>
 </html>

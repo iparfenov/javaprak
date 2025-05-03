@@ -2,10 +2,15 @@ package com.prak.web.controllers;
 
 import com.prak.web.components.DAOsBean;
 import com.prak.web.entities.Employees;
+import com.prak.web.exceptions.MalformedRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/employees")
@@ -16,11 +21,65 @@ public class EmployeeController {
 
     @GetMapping
     public String search(Model model) {
-        if (daos.getEmployee() == null) { return "redirect:/login"; }
+        if (daos.getEmployee() == null) return "redirect:/login";
         model.addAttribute("employee", daos.getEmployee());
         model.addAttribute("employees", daos.getEmployeeDAO().getAll());
         model.addAttribute("page", "/employees");
         return "search";
+    }
+
+    @GetMapping("/add")
+    public String add(Model model) {
+        if (daos.getEmployee() == null) { return "redirect:/login"; }
+        model.addAttribute("adding_employee", true);
+        return search(model);
+    }
+
+    @PostMapping("/add")
+    public String add(@RequestParam("name") String name,
+                      @RequestParam("address") String address,
+                      @RequestParam("birthday_year") int birthday_year,
+                      @RequestParam("birthday_month") int birthday_month,
+                      @RequestParam("birthday_day") int birthday_day,
+                      @RequestParam("education") String education,
+                      @RequestParam("working_since_year") int working_since_year,
+                      @RequestParam("working_since_month") int working_since_month,
+                      @RequestParam("working_since_day") int working_since_day,
+                      @RequestParam("position") String position,
+                      @RequestParam("email") String email,
+                      @RequestParam("login") String login,
+                      @RequestParam("password") String password,
+                      @RequestParam(value = "is_admin", required = false) Optional<Boolean> isAdminIn,
+                      Model model) {
+        if (name.isEmpty() || address.isEmpty() || position.isEmpty() || email.isEmpty() || login.isEmpty() || password.isEmpty()) {
+            throw new MalformedRequestException("Не заполнены обязательные поля!");
+        }
+        Boolean isAdmin = isAdminIn.orElse(false);
+        Calendar birthday = Calendar.getInstance();
+        birthday.set(birthday_day, birthday_month, birthday_year);
+
+        Calendar working_since = Calendar.getInstance();
+        working_since.set(working_since_year, working_since_month, working_since_day);
+
+        Employees new_e = new Employees();
+        new_e.setName(name);
+        new_e.setAddress(address);
+        new_e.setBirthday(new Timestamp(birthday.getTimeInMillis()));
+        new_e.setEducation(education);
+        new_e.setWorking_since(new Timestamp(working_since.getTimeInMillis()));
+        new_e.setPosition(position);
+        new_e.setEmail(email);
+        new_e.setIs_admin(isAdmin);
+        new_e.setLogin(login);
+        new_e.setPassword(password);
+        try {
+            daos.getEmployeeDAO().insert(new_e);
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            return search(model);
+        }
+//        return search(model);
+        return "redirect:/employees";
     }
 
     @PostMapping
