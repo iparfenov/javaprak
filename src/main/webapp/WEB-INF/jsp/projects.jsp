@@ -35,7 +35,7 @@
         </table>
         <c:if test="${employee.getIs_admin()}">
             <c:if test="${employees == null}">
-                <a href="/projects/add">Новый проект</a>
+                <a href="/projects/add" id="new-proj">Новый проект</a>
             </c:if>
             <c:if test="${employees != null}">
                 <br><br><br>

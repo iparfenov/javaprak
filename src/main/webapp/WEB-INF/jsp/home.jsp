@@ -14,8 +14,8 @@
     </head>
         <body>
             <jsp:include page="/templates/header.jsp"/>
-            <h1 style="text-align: center">Привет, ${employee.getName()}!</h1>
-            <table style="width: 100%">
+            <h1 id="welcome" style="text-align: center">Привет, ${employee.getName()}!</h1>
+            <table id="my-info" style="width: 100%">
                 <tr>
                     <th>Мои проекты</th>
                     <th>Мои выплаты</th>
@@ -23,7 +23,7 @@
 
                 <tr>
                     <td style="margin: 0px auto; width: 40%">
-                        <table style="width: 100%">
+                        <table id="projects" style="width: 100%">
                             <tr>
                                 <th>Название</th>
                                 <th>Дата начала</th>
@@ -39,7 +39,7 @@
                         </table>
                     </td>
                     <td style="margin: 0px auto; width: 40%">
-                        <table style="width: 100%">
+                        <table id="payouts" style="width: 100%">
                             <tr>
                                 <th>Дата выплаты</th>
                                 <th>Сумма</th>

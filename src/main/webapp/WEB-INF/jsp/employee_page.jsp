@@ -20,25 +20,25 @@
         <p>День рождения: ${data.getBirthday().toLocalDateTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))}</p>
 
         <c:if test="${data.getEducation() != null}">
-            <p>Образование: ${data.getEducation()}
+            <p id="edu">Образование: ${data.getEducation()}
                 <c:if test="${data.getId() == employee.getId() || employee.getIs_admin()}">
-                    <a style="margin-left: 10px" href="/employees/${data.getId()}/changeEducation">изменить</a>
+                    <a id="change-edu" style="margin-left: 10px" href="/employees/${data.getId()}/changeEducation">изменить</a>
                 </c:if>
             </p>
             <c:if test="${changing_education}">
-                <form method="POST" action="/employees/${data.getId()}/changeEducation">
+                <form id="change-edu-form" method="POST" action="/employees/${data.getId()}/changeEducation">
                     <p>Новый текст: <input name="education"></p>
                     <button>Подтвердить</button>
                 </form>
             </c:if>
         </c:if>
 
-        <p>Электронная почта: ${data.getEmail()}
+        <p id="email">Электронная почта: ${data.getEmail()}
             <c:if test="${data.getId() == employee.getId() || employee.getIs_admin()}">
-                <a style="margin-left: 10px" href="/employees/${data.getId()}/changeEmail">изменить</a>
+                <a id="change-email" style="margin-left: 10px" href="/employees/${data.getId()}/changeEmail">изменить</a>
             </c:if>
             <c:if test="${changing_email}">
-                <form method="POST" action="/employees/${data.getId()}/changeEmail">
+                <form id="change-email-form" method="POST" action="/employees/${data.getId()}/changeEmail">
                     <p>Новый E-mail: <input name="email"></p>
                     <button>Подтвердить</button>
                 </form>
@@ -46,11 +46,11 @@
         </p>
 
         <c:if test="${data.getId() == employee.getId() || employee.getIs_admin()}">
-            <p>Адрес: ${data.getAddress()}
-                <a style="margin-left: 10px" href="/employees/${data.getId()}/changeAddress">изменить</a>
+            <p id="address">Адрес: ${data.getAddress()}
+                <a id="change-address" style="margin-left: 10px" href="/employees/${data.getId()}/changeAddress">изменить</a>
             </p>
             <c:if test="${changing_address}">
-                <form method="POST" action="/employees/${data.getId()}/changeAddress">
+                <form id="change-address-form" method="POST" action="/employees/${data.getId()}/changeAddress">
                     <p>Новый адрес: <input name="address"></p>
                     <button>Подтвердить</button>
                 </form>
@@ -58,7 +58,7 @@
         </c:if>
 
         <h2 style="text-align: center">История работы</h2>
-        <table>
+        <table id="history">
             <tr>
                 <th>Позиция</th>
                 <th>Дата назначения</th>
@@ -75,10 +75,10 @@
         </table>
 
         <c:if test="${employee.getIs_admin()}">
-            <a style="margin-left: 10px" href="/employees/${data.getId()}/promote">Изменить позицию</a>
+            <a id="change-pos" style="margin-left: 10px" href="/employees/${data.getId()}/promote">Изменить позицию</a>
         </c:if>
         <c:if test="${changing_position}">
-            <form method="POST" action="/employees/${data.getId()}/promote">
+            <form id="change-pos-form" method="POST" action="/employees/${data.getId()}/promote">
                 <p>Новая позиция: <input name="position"></p>
                 <button>Подтвердить</button>
             </form>

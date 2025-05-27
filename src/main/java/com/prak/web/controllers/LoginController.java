@@ -39,7 +39,7 @@ public class LoginController {
             return redirectView;
         } else {
             redirectView.setUrl("/login");
-            redirectAttributes.addFlashAttribute("login_success", false);
+            redirectAttributes.addFlashAttribute("login_successful", false);
             return redirectView;
         }
     }
@@ -48,7 +48,7 @@ public class LoginController {
     public String logout(HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.invalidate();
-        return "redirect:/";
+        return "redirect:/login";
     }
 
 }

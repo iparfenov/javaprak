@@ -6,15 +6,15 @@
     </head>
     <body>
         <c:if test="${login_successful != null && !login_successful}">
-            <h3>Неправильный логин/пароль!</h3>
+            <h3 style="background-color: red;" id="error-message">Неправильный логин/пароль!</h3>
         </c:if>
-        <form action="login" method="post">
+        <form id="login" action="login" method="post">
             <p>Логин:</p>
             <input name="login">
             <p>Пароль:</p>
             <input type="password" name="password">
             <br>
-            <input type="submit" value="Войти">
+            <button>Войти</button>
         </form>
     </body>
 </html>

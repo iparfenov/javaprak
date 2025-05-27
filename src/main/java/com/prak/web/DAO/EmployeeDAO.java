@@ -34,6 +34,8 @@ public class EmployeeDAO extends CommonDAO<Employees> {
         Employee_history eh = ehdao.getById(e.getId());
         eh.getPositions().add(position);
         eh.getPromoted_at().add(promoted_at);
+        e.setPosition(position);
+        this.update(e);
         ehdao.update(eh);
     }
 

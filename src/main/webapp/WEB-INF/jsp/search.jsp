@@ -18,7 +18,7 @@
                 <p>Имя: </p>
                 <input name="search">
             </nobr>
-            <input type="submit" value="Поиск">
+            <button>Поиск</button>
         </form>
         <c:if test="${employees != null}">
             <table style="width: 100%">
@@ -36,7 +36,7 @@
         </c:if>
 
         <c:if test="${employee.getIs_admin() && !adding_employee}">
-            <a href="/employees/add">Добавить нового сотрудника</a>
+            <a id="add-button" href="/employees/add">Добавить нового сотрудника</a>
         </c:if>
 
         <c:if test="${employee.getIs_admin() && adding_employee}">
@@ -46,7 +46,7 @@
                 int month = calendar.get(Calendar.MONTH);
                 int day = calendar.get(Calendar.DATE);
             %>
-            <form method="POST" action="/employees/add">
+            <form id="add-form" method="POST" action="/employees/add">
                 <p>Имя: <input name="name"></p>
                 <p>Адрес: <input name="address"> </p>
                 <p>День рождения:

@@ -6,18 +6,18 @@
     <body>
         <nav style="margin-bottom: 10px">
             <div style="display: inline-flex; justify-content: space-around; width: 50%">
-                <a href="/home">Главная</a>
-                <a href="/projects">Проекты</a>
-                <a href="/bonuses">Премии</a>
-                <a href="/employees">Поиск сотрудников</a>
+                <a id="nav-home" href="/home">Главная</a>
+                <a id="nav-projects" href="/projects">Проекты</a>
+                <a id="nav-bonuses" href="/bonuses">Премии</a>
+                <a id="nav-employees" href="/employees">Поиск сотрудников</a>
                 <c:if test="${employee.getIs_admin()}">
                     <a href="/payouts">Выплаты</a>
                 </c:if>
             </div>
             <div style="display: inline-flex; justify-content: space-around; width: 40%"></div>
             <div style="display: inline-flex; justify-content: space-around; width: 9%">
-                <a href="/logout">Выйти</a>
-                <a href="/employees/${employee.getId()}">${employee.getLogin()}</a>
+                <a id="nav-logout" href="/logout">Выйти</a>
+                <a id="nav-my-page" href="/employees/${employee.getId()}">${employee.getLogin()}</a>
             </div>
         </nav>
         <c:if test="${error != null}">

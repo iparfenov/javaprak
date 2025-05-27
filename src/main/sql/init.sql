@@ -1,8 +1,8 @@
 INSERT INTO website.employees (name, address, birthday, education, working_since, position, email, is_admin, login, password)
 VALUES
-('Светлана Ищенко', 'г. Москва, улица Улица дом 5 кв. 25', '2000-01-15', 'высшее', '2024-09-10', 'директор', 'director@company.org', True, 'svetlana', 'password'),
-('Екатерина Андреева', 'г. Москва, ...', '1999-04-04', 'высшее', '2025-01-15', 'менеджер', 'manager@company.org', True, 'ekaterina', 'password'),
-('Александр Погодин', 'г. Москва ...', '1995-12-15', 'высшее', '2023-09-10', 'программист', 'employee@company.org', False, 'alexander', 'password');
+('Светлана Ищенко', 'г. Москва, улица Улица дом 5 кв. 25', '2000-01-15', 'высшее', '2024-09-10', 'директор', 'director@company.org', True, 'svetlana', 'passwordThatDoesNotPissOffGoogle'),
+('Екатерина Андреева', 'г. Москва, ...', '1999-04-04', 'высшее', '2025-01-15', 'менеджер', 'manager@company.org', True, 'ekaterina', 'passwordThatDoesNotPissOffGoogle'),
+('Александр Погодин', 'г. Москва ...', '1995-12-15', 'высшее', '2023-09-10', 'программист', 'employee@company.org', False, 'alexander', 'passwordThatDoesNotPissOffGoogle');
 
 INSERT INTO website.projects (project_name, project_start, project_end, project_head)
 VALUES
